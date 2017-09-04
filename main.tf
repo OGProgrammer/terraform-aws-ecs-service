@@ -6,11 +6,6 @@ resource "aws_alb" "alb" {
 
   enable_deletion_protection = "${var.delete_protection}"
 
-  access_logs {
-    bucket = "${aws_s3_bucket.alb_logs.bucket}"
-    prefix = "access-logs"
-  }
-
   tags {
     ManagedBy = "Terraform"
     Name = "${var.env_name}-${var.app_name}"
@@ -23,11 +18,8 @@ resource "aws_alb" "alb" {
   }
 }
 
-resource "aws_s3_bucket" "alb_logs" {
-  bucket = "${var.env_name}-${var.app_name}-alb-logs"
-  acl    = "private"
 
-  // @todo add lifecycle rules to archive stuff
+// @todo add lifecycle rules to archive stuff
 
   tags {
     ManagedBy = "Terraform"
