@@ -43,7 +43,7 @@ export AWS_DEFAULT_REGION=${target_aws_region}
 #export TF_LOG=info
 
 # Remove the existing .terraform directory if it exists
-rm -rf .terraform/ terraform.tfstate.backup
+rm -rf .terraform* terraform.tfstate.backup
 
 echo "Setting up terraform configuration for remote s3 state file storage"
 echo "terraform init -backend-config \"bucket=${terraform_remote_states_bucket}\" -backend-config \"key=${env_name}/${app_name}.tfstate\" -backend-config \"region=${target_aws_region}\""
