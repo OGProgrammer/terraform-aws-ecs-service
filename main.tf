@@ -8,7 +8,7 @@ resource "aws_alb" "alb" {
 
   access_logs {
     bucket = "${aws_s3_bucket.alb_logs.bucket}"
-    prefix = "access-logs/"
+    prefix = "access-logs"
   }
 
   tags {
