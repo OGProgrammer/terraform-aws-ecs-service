@@ -72,13 +72,14 @@ resource "aws_iam_role" "application" {
   "Version": "2008-10-17",
   "Statement": [
     {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": [
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
           "ecs.amazonaws.com",
           "ec2.amazonaws.com"
-        ],
-      "Action": "sts:AssumeRole"
+        ]
+      },
+      "Effect": "Allow"
     }
   ]
 }
