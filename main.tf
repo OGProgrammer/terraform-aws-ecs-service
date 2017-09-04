@@ -57,7 +57,21 @@ resource "aws_alb_listener" "application" {
   }
 }
 
-resource "aws_ecs_task_definition" "app_task_def" {
+data "template_file" "service_task" {
+  template = "${file("${path.module}/service.json")}"
+
+  vars = {
+    env_name = "${var.env_name}"
+    region = "${var.region}"
+    app_name = "${var.app_name}"
+    image_name = "${var.image_name}"
+    docker_tag = "${var.docker_tag}"
+    max_memory = "${var.max_memory}"
+    reserved_memory = "${var.reserved_memory}"
+  }
+}
+
+resource "aws_ecs_task_definition" "application" {
   family = "${var.env_name}-${var.app_name}"
   container_definitions = "${data.template_file.service_task.rendered}"
 }
@@ -68,7 +82,7 @@ resource "aws_ecs_task_definition" "app_task_def" {
 resource "aws_ecs_service" "application" {
   name = "${var.env_name}-${var.app_name}"
   cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
-  task_definition = "${aws_ecs_task_definition.app_task_def.task_role_arn}"
+  task_definition = "${aws_ecs_task_definition.application.task_role_arn}"
   desired_count = "${var.service_desired}"
   iam_role = "${var.ecs_iam_role}"
 

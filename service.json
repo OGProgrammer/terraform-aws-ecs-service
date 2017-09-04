@@ -26,5 +26,5 @@
       "awslogs-region": "${region}",
       "awslogs-stream-prefix": "awslogs-${app_name}"
     }
-  },
+  }
 }]
