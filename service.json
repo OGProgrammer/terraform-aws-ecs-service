@@ -18,13 +18,5 @@
     "containerPort": 80,
     "protocol": "tcp"
   }],
-  "essential": true,
-  "logConfiguration": {
-    "logDriver": "awslogs",
-    "options": {
-      "awslogs-group": "${env_name}",
-      "awslogs-region": "${region}",
-      "awslogs-stream-prefix": "awslogs-${app_name}"
-    }
-  }
+  "essential": true
 }]
