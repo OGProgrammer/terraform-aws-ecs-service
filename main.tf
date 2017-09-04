@@ -74,10 +74,10 @@ resource "aws_iam_role" "application" {
     {
       "Sid": "",
       "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs.amazonaws.com",
-        "Service": "ec2.amazonaws.com"
-      },
+      "Principal": [
+          "ecs.amazonaws.com",
+          "ec2.amazonaws.com"
+        ],
       "Action": "sts:AssumeRole"
     }
   ]
@@ -92,7 +92,7 @@ resource "aws_ecs_service" "application" {
   cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
   task_definition = "${aws_ecs_task_definition.application.arn}"
   desired_count = "${var.service_desired}"
-  iam_role = "${aws_iam_role.application.id}"
+  iam_role = "${aws_iam_role.application.arn}"
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.application.arn}"
