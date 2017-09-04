@@ -68,7 +68,7 @@ resource "aws_ecs_task_definition" "app_task_def" {
 resource "aws_ecs_service" "application" {
   name = "${var.env_name}-${var.app_name}"
   cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
-  task_definition = "${aws_ecs_task_definition.app_task_def.arn}"
+  task_definition = "${aws_ecs_task_definition.app_task_def.task_role_arn}"
   desired_count = "${var.service_desired}"
   iam_role = "${var.ecs_iam_role}"
 
