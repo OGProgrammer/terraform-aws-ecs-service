@@ -75,7 +75,7 @@ resource "aws_iam_role" "application" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "Service": "ecs.amazonaws.com"
+        "Service": "ecs.amazonaws.com",
         "Service": "ec2.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
