@@ -85,32 +85,32 @@ resource "aws_ecs_task_definition" "application" {
 
 // Check this out if you want HTTPS - https://www.terraform.io/docs/providers/aws/r/alb_listener.html
 // Howver, this requires you have an aws managed certificate ARN for a domain you own.
-
-resource "aws_ecs_service" "application" {
-  name = "${var.env_name}-${var.app_name}"
-  cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
-  task_definition = "${aws_ecs_task_definition.application.family}:${aws_ecs_task_definition.application.revision}"
-  desired_count = "${var.service_desired}"
-  iam_role = "${var.ecs_iam_role}"
-
-  load_balancer {
-    target_group_arn = "${aws_alb_target_group.application.arn}"
-    container_name = "${var.env_name}-${var.app_name}"
-    container_port = 80
-  }
-
-  placement_strategy {
-    type  = "spread"
-    field = "instanceId"
-  }
-
-  depends_on = [
-    "aws_ecs_task_definition.application",
-    "aws_alb_target_group.application",
-    "aws_alb.alb",
-    "aws_alb_listener.application"
-  ]
-}
+//
+//resource "aws_ecs_service" "application" {
+//  name = "${var.env_name}-${var.app_name}"
+//  cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
+//  task_definition = "${aws_ecs_task_definition.application.family}:${aws_ecs_task_definition.application.revision}"
+//  desired_count = "${var.service_desired}"
+//  iam_role = "${var.ecs_iam_role}"
+//
+//  load_balancer {
+//    target_group_arn = "${aws_alb_target_group.application.arn}"
+//    container_name = "${var.env_name}-${var.app_name}"
+//    container_port = 80
+//  }
+//
+//  placement_strategy {
+//    type  = "spread"
+//    field = "instanceId"
+//  }
+//
+//  depends_on = [
+//    "aws_ecs_task_definition.application",
+//    "aws_alb_target_group.application",
+//    "aws_alb.alb",
+//    "aws_alb_listener.application"
+//  ]
+//}
 
 resource "aws_security_group" "alb-application" {
   name = "${var.env_name}-${var.app_name}-alb-sg"
