@@ -215,7 +215,7 @@ resource "aws_cloudwatch_metric_alarm" "application-scale-down" {
   }
 
   depends_on = [
-    "aws_autoscaling_policy.scale-down",
+    "aws_appautoscaling_policy.scale-down",
     "aws_cloudwatch_metric_alarm.application-cpu-scale-up"
   ]
 }
