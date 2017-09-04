@@ -52,6 +52,9 @@ terraform init \
     -backend-config="key=${env_name}/${app_name}.tfstate" \
     -backend-config="region=${target_aws_region}"
 
+echo "Getting dependent tf modules"
+terraform get -update
+
 echo "terraform apply -var-file=\"${variablesFile}\""
 if terraform apply -var-file="${variablesFile}"; then
     echo "Terraform apply succeeded."
