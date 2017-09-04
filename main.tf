@@ -18,17 +18,6 @@ resource "aws_alb" "alb" {
   }
 }
 
-
-// @todo add lifecycle rules to archive stuff
-
-  tags {
-    ManagedBy = "Terraform"
-    Name = "${var.env_name}-${var.app_name}-alb-logs"
-    Env = "${var.env_name}"
-    App = "${var.app_name}"
-  }
-}
-
 resource "aws_alb_target_group" "application" {
   name = "${var.env_name}-${var.app_name}"
   port = 80
