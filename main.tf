@@ -79,7 +79,7 @@ data "template_file" "service_task" {
 }
 
 resource "aws_ecs_task_definition" "application" {
-  family = "service"
+  family = "${var.env_name}-${var.app_name}"
   container_definitions = "${data.template_file.service_task.rendered}"
 }
 
