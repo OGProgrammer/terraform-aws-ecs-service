@@ -79,6 +79,7 @@ resource "aws_ecs_service" "application" {
   }
 
   depends_on = [
+    "aws_ecs_task_definition.application",
     "aws_alb_target_group.application",
     "aws_alb.alb",
     "aws_alb_listener.application"
