@@ -1,7 +1,7 @@
 resource "aws_alb" "alb" {
   name = "${var.env_name}-${var.app_name}"
   internal = "${var.internal_alb}"
-  subnets = ["${data.terraform_remote_state.infrastructure_state.public_subnets}"]
+  subnets = ["${data.terraform_remote_state.infrastructure_state.public_subnet_ids}"]
   security_groups = ["${aws_security_group.alb-application.id}"]
 
   enable_deletion_protection = "${var.delete_protection}"
