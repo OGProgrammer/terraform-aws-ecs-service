@@ -64,7 +64,7 @@ resource "aws_alb_listener" "application" {
   }
 }
 
-data "template_file" "service_task" {
+data "template_file" "service_definition" {
   template = "${file("${path.module}/service.json")}"
 
   vars = {
@@ -80,7 +80,7 @@ data "template_file" "service_task" {
 
 resource "aws_ecs_task_definition" "application" {
   family = "${var.env_name}-${var.app_name}"
-  container_definitions = "${data.template_file.service_task.rendered}"
+  container_definitions = "${data.template_file.service_definition.rendered}"
 }
 
 // Check this out if you want HTTPS - https://www.terraform.io/docs/providers/aws/r/alb_listener.html
