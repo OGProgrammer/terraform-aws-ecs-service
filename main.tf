@@ -91,7 +91,7 @@ EOF
 resource "aws_iam_policy_attachment" "ecs_application" {
   name = "${var.env_name}-${var.app_name}"
   policy_arn = "${var.ecs_iam_role}"
-  role = "${aws_iam_role.application.id}"
+  roles = ["${aws_iam_role.application.id}"]
 }
 
 resource "aws_ecs_service" "application" {
