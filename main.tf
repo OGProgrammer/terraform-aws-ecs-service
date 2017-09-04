@@ -57,6 +57,11 @@ resource "aws_alb_listener" "application" {
   }
 }
 
+resource "aws_ecs_task_definition" "application" {
+  family = "${var.env_name}-${var.app_name}"
+  container_definitions = "${data.template_file.service_task.rendered}"
+}
+
 // Check this out if you want HTTPS - https://www.terraform.io/docs/providers/aws/r/alb_listener.html
 // Howver, this requires you have an aws managed certificate ARN for a domain you own.
 
@@ -79,16 +84,10 @@ resource "aws_ecs_service" "application" {
   }
 
   depends_on = [
-    "aws_ecs_task_definition.application",
     "aws_alb_target_group.application",
     "aws_alb.alb",
     "aws_alb_listener.application"
   ]
-}
-
-resource "aws_ecs_task_definition" "application" {
-  family = "${var.env_name}-${var.app_name}"
-  container_definitions = "${data.template_file.service_task.rendered}"
 }
 
 resource "aws_security_group" "alb-application" {
