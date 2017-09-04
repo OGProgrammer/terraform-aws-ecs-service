@@ -17,6 +17,10 @@ resource "aws_alb" "alb" {
     Env = "${var.env_name}"
     App = "${var.app_name}"
   }
+
+  provisioner "local-exec" {
+    command = "sleep 10"
+  }
 }
 
 resource "aws_s3_bucket" "alb_logs" {
@@ -43,6 +47,9 @@ resource "aws_alb_target_group" "application" {
     Name = "${var.env_name}-${var.app_name}"
     Env = "${var.env_name}"
     App = "${var.app_name}"
+  }
+  provisioner "local-exec" {
+    command = "sleep 10"
   }
 }
 
@@ -72,7 +79,7 @@ data "template_file" "service_task" {
 }
 
 resource "aws_ecs_task_definition" "application" {
-  family = "${var.env_name}-${var.app_name}"
+  family = "service"
   container_definitions = "${data.template_file.service_task.rendered}"
 }
 
