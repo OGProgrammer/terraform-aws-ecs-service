@@ -40,7 +40,7 @@ export AWS_DEFAULT_REGION=${target_aws_region}
 #export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
 
 # Uncomment for verbose terraform output
-export TF_LOG=info
+#export TF_LOG=info
 
 # Remove the existing .terraform directory if it exists
 rm -rf .terraform* terraform.tfstate.backup
