@@ -65,8 +65,8 @@ resource "aws_ecs_task_definition" "application" {
 }
 
 resource "aws_iam_role" "application" {
-  name = "foo_www_ecs_service_scheduler"
-  path = "/foo/bar/"
+  name = "${var.env_name}-${var.app_name}"
+  path = "/"
   assume_role_policy = <<EOF
 {
   "Version": "2008-10-17",
@@ -87,6 +87,12 @@ EOF
 }
 // Check this out if you want HTTPS - https://www.terraform.io/docs/providers/aws/r/alb_listener.html
 // Howver, this requires you have an aws managed certificate ARN for a domain you own.
+
+resource "aws_iam_policy_attachment" "ecs_application" {
+  name = "${var.env_name}-${var.app_name}"
+  policy_arn = "${var.ecs_iam_role}"
+  role = "${aws_iam_role.application.id}"
+}
 
 resource "aws_ecs_service" "application" {
   name = "${var.env_name}-${var.app_name}"
