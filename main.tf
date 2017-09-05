@@ -66,7 +66,6 @@ resource "aws_ecs_task_definition" "application" {
 
 resource "aws_iam_role" "application" {
   name = "${var.env_name}-${var.app_name}"
-  path = "/"
   assume_role_policy = <<EOF
 {
   "Version": "2008-10-17",
@@ -94,6 +93,16 @@ resource "aws_iam_policy_attachment" "ecs_application" {
   roles = ["${aws_iam_role.application.id}"]
 }
 
+resource "template_file" "ecs_service_role_policy" {
+  template = "${file("policies/ecs-service-role-policy.json")}"
+}
+
+/* ecs service scheduler role */
+resource "aws_iam_role_policy" "ecs_service_role_policy" {
+  name = "${var.env_name}-${var.app_name}_policy"
+  policy   = "${template_file.ecs_service_role_policy.rendered}"
+  role     = "${aws_iam_role.application.id}"
+}
 resource "aws_ecs_service" "application" {
   name = "${var.env_name}-${var.app_name}"
   cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
