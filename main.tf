@@ -94,7 +94,7 @@ resource "aws_iam_policy_attachment" "ecs_application" {
 }
 
 resource "template_file" "ecs_service_role_policy" {
-  template = "${file("policies/ecs-service-role-policy.json")}"
+  template = "${file("ecs-service-policy.json")}"
 }
 
 /* ecs service scheduler role */
