@@ -169,11 +169,22 @@ resource "aws_security_group" "alb-application" {
   }
 }
 
+resource "aws_iam_role" "ecs_autoscale_role" {
+  name               = "ecsAutoscaleRole"
+  assume_role_policy = "${file("${path.module}/policies/autoscale-assume-role.json")}"
+}
+
+resource "aws_iam_policy_attachment" "ecs_autoscale_role_attach" {
+  name       = "ecs-autoscale-role-attach"
+  roles      = ["${aws_iam_role.ecs_autoscale_role.name}"]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
+}
+
 resource "aws_appautoscaling_target" "application" {
   service_namespace = "ecs"
   resource_id = "service/${data.terraform_remote_state.infrastructure_state.ecs_cluster_name}/${aws_ecs_service.application.name}"
   scalable_dimension = "ecs:service:DesiredCount"
-  role_arn = "${var.ecs_as_iam_role}"
+  role_arn = "${aws_iam_role.ecs_autoscale_role.arn}"
   min_capacity = "${var.service_min}"
   max_capacity = "${var.service_max}"
 
