@@ -12,10 +12,6 @@ resource "aws_alb" "alb" {
     Env = "${var.env_name}"
     App = "${var.app_name}"
   }
-
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
 }
 
 resource "aws_alb_target_group" "application" {
@@ -28,9 +24,6 @@ resource "aws_alb_target_group" "application" {
     Name = "${var.env_name}-${var.app_name}"
     Env = "${var.env_name}"
     App = "${var.app_name}"
-  }
-  provisioner "local-exec" {
-    command = "sleep 10"
   }
 }
 
