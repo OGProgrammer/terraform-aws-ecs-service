@@ -81,7 +81,7 @@ EOF
 // However, this requires you have an aws managed certificate ARN for a domain you own.
 resource "aws_iam_role_policy_attachment" "ecs_service_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
-  role = "${aws_iam_role.application.arn}"
+  role = "${aws_iam_role.application.name}"
 }
 
 resource "aws_ecs_service" "application" {
