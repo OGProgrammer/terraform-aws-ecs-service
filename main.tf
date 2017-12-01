@@ -67,8 +67,7 @@ resource "aws_iam_role" "application" {
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": [
-          "ecs.amazonaws.com",
-          "ec2.amazonaws.com"
+          "ecs.amazonaws.com"
         ]
       },
       "Effect": "Allow"
@@ -77,25 +76,14 @@ resource "aws_iam_role" "application" {
 }
 EOF
 }
+
 // Check this out if you want HTTPS - https://www.terraform.io/docs/providers/aws/r/alb_listener.html
-// Howver, this requires you have an aws managed certificate ARN for a domain you own.
-
-resource "aws_iam_policy_attachment" "ecs_application" {
-  name = "${var.env_name}-${var.app_name}"
-  policy_arn = "${var.ecs_iam_role}"
-  roles = ["${aws_iam_role.application.id}"]
+// However, this requires you have an aws managed certificate ARN for a domain you own.
+resource "aws_iam_role_policy_attachment" "ecs_service_role" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+  role = "${aws_iam_role.application.arn}"
 }
 
-resource "template_file" "ecs_service_role_policy" {
-  template = "${file("ecs-service-policy.json")}"
-}
-
-/* ecs service scheduler role */
-resource "aws_iam_role_policy" "ecs_service_role_policy" {
-  name = "${var.env_name}-${var.app_name}_policy"
-  policy   = "${template_file.ecs_service_role_policy.rendered}"
-  role     = "${aws_iam_role.application.id}"
-}
 resource "aws_ecs_service" "application" {
   name = "${var.env_name}-${var.app_name}"
   cluster = "${data.terraform_remote_state.infrastructure_state.cluster_id}"
