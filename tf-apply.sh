@@ -30,8 +30,13 @@ if [ -z "${target_aws_region}" ]; then
     echo "Please specify an target_aws_region in manifest"
     exit
 fi
+s3_prefix=$(sed -n 's/^s3prefix = "\(.*\)"$/\1/p' $variablesFile)
+if [ -z "${s3_prefix}" ]; then
+    echo "Please specify an s3 prefix in manifest"
+    exit
+fi
 
-terraform_remote_states_bucket=terraform-states-${target_aws_region}
+terraform_remote_states_bucket=${s3_prefix}-terraform-states-${target_aws_region}
 
 export AWS_DEFAULT_REGION=${target_aws_region}
 
@@ -66,4 +71,4 @@ fi
 echo "# # # # # YOU DID IT! # # # # # #"
 echo "Yay! Your ECS service is now provisioned!"
 
-echo "done";
+echo "Apply Completed";

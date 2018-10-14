@@ -4,6 +4,7 @@ variable "region" {}
 variable "app_name" {}
 variable "image_name" {}
 variable "docker_tag" {}
+variable "s3prefix" {}
 
 //Defaults
 variable "reserved_memory" {
